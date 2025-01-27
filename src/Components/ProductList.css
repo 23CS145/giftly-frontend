@@ -1,0 +1,101 @@
+.product-list-container {
+    text-align: center;
+    padding: 20px;
+    font-family: Arial, sans-serif;
+}
+
+.filters {
+    margin-bottom: 20px;
+}
+
+.filters button {
+    margin: 0 10px;
+    padding: 10px 20px;
+    border: none;
+    background-color: #f16f63;
+    color: white;
+    cursor: pointer;
+    border-radius: 50px;
+    transition: background-color 0.3s ease;
+}
+
+.filters button:hover {
+    background-color: #972e25;
+}
+
+.filters button.active {
+    background-color: #010101;
+    color: white;
+}
+
+.product-list {
+    display: grid;
+    grid-template-columns: repeat(4, minmax(250px, 1fr)); /* Responsive grid */
+    gap: 40px 30px; /* 40px vertical and 30px horizontal spacing */
+    padding: 0 50px; /* Reduce side padding for better layout fit */
+    justify-content: center;
+}
+
+.product-card {
+    border: 1px solid #ddd;
+    border-radius: 10px;
+    padding: 20px;
+    max-width: 100%;
+    width: 100%;
+    box-sizing: border-box; /* Ensure padding doesn't affect width */
+    text-align: center;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+    transition: transform 0.3s ease;
+    background-color: #fff;
+}
+
+.product-card:hover {
+    transform: scale(1.05);
+}
+
+.product-card img {
+    width: 100%;
+    height: 200px; /* Fixed height for uniformity */
+    object-fit: contain; /* Ensure image fits without cropping */
+    border-radius: 10px;
+}
+
+.product-card h3 {
+    font-size: 18px;
+    margin: 15px 0 10px;
+}
+
+.product-card p {
+    font-size: 16px;
+    margin: 5px 0;
+}
+
+.cart {
+    display: flex;
+    align-items: center;
+    font-size: 1.5rem;
+    margin-bottom: 1rem;
+}
+
+.cart span:first-child {
+    margin-right: 0.5rem;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+        gap: 30px 20px; /* Reduce spacing for smaller screens */
+    }
+}
+
+@media (max-width: 768px) {
+    .product-list {
+        grid-template-columns: repeat(auto-fit, minmax(180px, 1fr));
+        gap: 20px; /* Further reduce spacing for mobile screens */
+    }
+
+    .product-card img {
+        height: 150px; /* Adjust image size for smaller screens */
+    }
+}
