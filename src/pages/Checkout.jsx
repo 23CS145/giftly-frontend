@@ -1,35 +1,36 @@
 import React, { useState } from "react";
 import { Link } from "react-router-dom";
 import "./Checkout.css";
-
 const Checkout = ({ cart }) => {
   const [shippingAddress, setShippingAddress] = useState("");
   const [phoneNumber, setPhoneNumber] = useState("");
   const [paymentInfo, setPaymentInfo] = useState("");
   const [paymentMethod, setPaymentMethod] = useState("");
   const [errors, setErrors] = useState({});
-
   const totalAmount = cart.reduce((total, item) => total + item.new_price * item.quantity, 0);
-
   const validateForm = () => {
     let formErrors = {};
-    let errorMessages = [];
-
-    if (!shippingAddress.trim()) {
-      formErrors.shippingAddress = "Shipping address is required.";
-      errorMessages.push("Shipping address is required.");
-    }
-    if (!phoneNumber.trim() || !/^\d{10}$/.test(phoneNumber)) {
-      formErrors.phoneNumber = "Valid phone number is required (10 digits).";
-      errorMessages.push("Valid phone number is required (10 digits).");
-    }
-    if ((paymentMethod === "creditCard" || paymentMethod === "paypal") && !paymentInfo.trim()) {
-      formErrors.paymentInfo = "Payment information is required.";
-      errorMessages.push("Payment information is required.");
-    }
-    if (!paymentMethod) {
-      formErrors.paymentMethod = "Please select a payment method.";
-      errorMessages.push("Please select a payment method.");
+    let errorMessages = []; 
+    if(!shippingAddress.trim() && !phoneNumber.trim() || !/^\d{10}$/.test(phoneNumber)&&(paymentMethod === "creditCard" && paymentMethod === "paypal") && !paymentInfo.trim()&&!paymentMethod){
+      formErrors.paymentMethod = "Please enter all the details.";
+      errorMessages.push("Please enter all the details.");
+    }else{
+      if (!shippingAddress.trim()) {
+        formErrors.shippingAddress = "Shipping address is required.";
+        errorMessages.push("Shipping address is required.");
+      }
+      if (!phoneNumber.trim() || !/^\d{10}$/.test(phoneNumber)) {
+        formErrors.phoneNumber = "Valid phone number is required (10 digits).";
+        errorMessages.push("Valid phone number is required (10 digits).");
+      }
+      if ((paymentMethod === "creditCard" || paymentMethod === "paypal") && !paymentInfo.trim()) {
+        formErrors.paymentInfo = "Payment information is required.";
+        errorMessages.push("Payment information is required.");
+      }
+      if (!paymentMethod) {
+        formErrors.paymentMethod = "Please select a payment method.";
+        errorMessages.push("Please select a payment method.");
+      }
     }
 
     setErrors(formErrors);
@@ -53,8 +54,6 @@ const Checkout = ({ cart }) => {
         paymentInfo,
         cart,
       });
-
-      // alert("Checkout successful!");
       window.location.href = "/order-confirmation";
     }
   };
@@ -143,19 +142,22 @@ const Checkout = ({ cart }) => {
           <ul>
             {cart.map((item) => (
               <li key={item.id}>
-                {item.name} x {item.quantity} - ${item.new_price * item.quantity}
+                {item.product_name} x {item.quantity} - ${item.new_price * item.quantity}
               </li>
             ))}
           </ul>
           <div className="total">Total: ${totalAmount.toFixed(2)}</div>
         </div>
-
+        <div className="btns">
+        
         <button type="submit">Complete Checkout</button>
+        <div className="back-to-cart">
+        <Link to="/cart">Back to Cart</Link>
+        </div>
+      </div>
       </form>
 
-      <div className="back-to-cart">
-        <Link to="/cart">Back to Cart</Link>
-      </div>
+      
     </div>
   );
 };

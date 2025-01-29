@@ -2,14 +2,16 @@ import React, { useState } from 'react';
 import Login from '../Components/Login';
 import Signup from '../Components/Signup';
 
-const Home = ({ onLogin, user }) => {
+const Home = ({user}) => {
   const [showLogin, setShowLogin] = useState(true);
 
   return (
     <div className="home-container">
       <h1>Welcome to Gifty!</h1>
-      {user ? (
-        <h2>Hello, {user.email}</h2>
+      {user ? (<>
+        <h2>Gifts !!! </h2>
+        <p>A Special Way To Show Love To Your Special Ones</p>
+        </>
       ) : (
         <>
           <div>
@@ -17,7 +19,7 @@ const Home = ({ onLogin, user }) => {
             <button onClick={() => setShowLogin(false)}>Sign Up</button>
           </div>
 
-          {showLogin ? <Login onLogin={onLogin} /> : <Signup onSignup={() => alert("Signup feature not implemented yet.")} />}
+          {showLogin ? <Login /> : <Signup />}
         </>
       )}
     </div>

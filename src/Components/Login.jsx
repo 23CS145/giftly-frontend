@@ -1,22 +1,25 @@
-import React, { useState } from 'react';
-import { useNavigate } from 'react-router-dom';
+import React, { useState } from "react";
+import { useNavigate } from "react-router-dom";
+import axios from "axios";
 
 const Login = ({ onLogin }) => {
-  const [email, setEmail] = useState('');
-  const [password, setPassword] = useState('');
-  const navigate = useNavigate(); // Initialize navigate function
+  const [email, setEmail] = useState("");
+  const [password, setPassword] = useState("");
+  const navigate = useNavigate();
 
-  const handleSubmit = (e) => {
+  const handleSubmit = async (e) => {
     e.preventDefault();
-    const userData = { email, password };
-    
-    onLogin(userData); // Call the login function
-    
-    // Redirect to products page if login is successful
-    if (email === "user@example.com" && password === "password123") {
-      navigate('/products');
-    } else {
-      alert("Invalid credentials!");
+    try {
+      const response = await axios.post("https://giftly-backend.onrender.com/login", { email, password });
+      if (response.data.token) {
+        localStorage.setItem("token", response.data.token);
+        onLogin({ email: response.data.user.email, role: response.data.user.role }, response.data.token);
+        navigate("/products");
+      } else {
+        alert(response.data.message || "Invalid credentials!");
+      }
+    } catch (error) {
+      alert("An error occurred while logging in. Please try again.");
     }
   };
 
@@ -24,24 +27,10 @@ const Login = ({ onLogin }) => {
     <div className="auth-container">
       <h2>Login</h2>
       <form onSubmit={handleSubmit}>
-        <div>
-          <label>Email</label>
-          <input
-            type="email"
-            value={email}
-            onChange={(e) => setEmail(e.target.value)}
-            required
-          />
-        </div>
-        <div>
-          <label>Password</label>
-          <input
-            type="password"
-            value={password}
-            onChange={(e) => setPassword(e.target.value)}
-            required
-          />
-        </div>
+        <label>Email</label>
+        <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
+        <label>Password</label>
+        <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
         <button type="submit">Login</button>
       </form>
     </div>

@@ -102,13 +102,12 @@
     background-color: #c6392d;
 }
 
-/* Responsive Design */
 @media (max-width: 768px) {
     .product-list {
         grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
     }
 
     .product-card img {
-        height: 150px; /* Adjust image size for smaller screens */
+        height: 150px; 
     }
 }

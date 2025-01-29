@@ -1,16 +1,48 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import axios from "axios";
 import ProductCard from "./ProductCard.jsx";
 import ProductModal from "./ProductModal.jsx";
-import allProducts from "../assets/all_product";
 import "./ProductList.css";
 
 const ProductList = ({ addToCart }) => {
   const [filter, setFilter] = useState("All");
   const [selectedProduct, setSelectedProduct] = useState(null);
+  const [products, setProducts] = useState([]);
+  const [loading, setLoading] = useState(true);
+  const [error, setError] = useState(null);
+
+  // Fetch products from backend
+  useEffect(() => {
+    const fetchProducts = async () => {
+      const token = localStorage.getItem("token"); // Retrieve token from localStorage
+      if (!token) {
+        setError("User is not authenticated");
+        setLoading(false);
+        return;
+      }
+
+      try {
+        const response = await axios.get("https://giftly-backend.onrender.com/api/products", {
+          headers: {
+            Authorization: `Bearer ${token}`, // Add token to Authorization header
+          },
+        });
+
+        setProducts(response.data); // Set the products data
+        setLoading(false);
+      } catch (error) {
+        console.log(error);
+        setError("Failed to load products");
+        setLoading(false);
+      }
+    };
+
+    fetchProducts();
+  }, []);
 
   const filteredProducts = filter === "All"
-    ? allProducts
-    : allProducts.filter((product) => product.Category === filter);
+    ? products
+    : products.filter((product) => product.category === filter);
 
   const handleProductClick = (product) => {
     setSelectedProduct(product);
@@ -19,6 +51,9 @@ const ProductList = ({ addToCart }) => {
   const closeModal = () => {
     setSelectedProduct(null);
   };
+
+  if (loading) return <div>Loading products...</div>;
+  if (error) return <div>{error}</div>;
 
   return (
     <div className="product-list-container">
@@ -30,18 +65,16 @@ const ProductList = ({ addToCart }) => {
         <button className={filter === "Wedding" ? "active" : ""} onClick={() => setFilter("Wedding")}>Wedding</button>
         <button className={filter === "Festive" ? "active" : ""} onClick={() => setFilter("Festive")}>Festive</button>
       </div>
-
       <div className="product-list">
         {filteredProducts.length > 0 ? (
           filteredProducts.map((product) => (
-            <ProductCard product={product} key={product.id} addToCart={addToCart} onProductClick={handleProductClick} />
+            <ProductCard product={product} key={product.product_id} addToCart={addToCart} onProductClick={handleProductClick} />
           ))
         ) : (
           <p>No products available in this category.</p>
         )}
       </div>
-
-      <ProductModal product={selectedProduct} closeModal={closeModal} />
+      <ProductModal product={selectedProduct} closeModal={closeModal} addToCart={addToCart} />
     </div>
   );
 };

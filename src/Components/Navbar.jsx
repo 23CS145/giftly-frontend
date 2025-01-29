@@ -7,7 +7,7 @@ const Navbar = ({ cartCount, user, onLogout }) => {
   const [menu, setMenu] = useState("");
 
   useEffect(() => {
-    setMenu(location.pathname);  // Set active tab based on the current route
+    setMenu(location.pathname);
   }, [location.pathname]);
 
   return (
@@ -15,7 +15,7 @@ const Navbar = ({ cartCount, user, onLogout }) => {
       <div className="navbar">
         <div className="nav-logo">
           <img
-            src={"https://marketplace.canva.com/EAGTjuZxR5w/2/0/1600w/canva-pink-bold-typography-gift-shop-logo-Z9yDvy8eqlU.jpg"}
+            src="https://marketplace.canva.com/EAGTjuZxR5w/2/0/1600w/canva-pink-bold-typography-gift-shop-logo-Z9yDvy8eqlU.jpg"
             alt="Shop Logo"
             className="logo"
           />
@@ -23,32 +23,40 @@ const Navbar = ({ cartCount, user, onLogout }) => {
         </div>
 
         <ul className="nav-links">
-          <li className={menu === "/" ? "active" : ""}>
-            <Link to="/" onClick={() => setMenu("/")}>Home</Link>
-            {menu === "/" && <hr />}
-          </li>
           <li className={menu === "/products" ? "active" : ""}>
             <Link to="/products" onClick={() => setMenu("/products")}>Products</Link>
-            {menu === "/products" && <hr />}
           </li>
-          <li className={`cart-icon ${menu === "/cart" ? "active-cart" : ""}`}>
-            <Link to="/cart" onClick={() => setMenu("/cart")}>
-              <img
-                src={"https://cdn-icons-png.flaticon.com/512/879/879764.png"}
-                alt="Cart Logo"
-                className="cart-logo"
-              />
-            </Link>
-            <div className="nav-cart-count">{cartCount}</div>
-          </li>
+          {user && (
+  <li className={`cart-icon ${menu === "/cart" ? "active-cart" : ""}`}>
+    <Link to="/cart" onClick={() => setMenu("/cart")}>
+      <img
+        src={"https://cdn-icons-png.flaticon.com/512/879/879764.png"}
+        alt="Cart Logo"
+        className="cart-logo"
+      />
+    </Link>
+    <div className="nav-cart-count">{cartCount}</div>
+  </li>
+)}
+
           {user ? (
-            <li>
-              <button onClick={onLogout} className="logout-btn">Logout</button>
-            </li>
+            <>
+              <li>
+                <Link to="/profile">Profile</Link>
+              </li>
+              <li>
+                <button onClick={onLogout} className="logout-btn">Logout</button>
+              </li>
+            </>
           ) : (
-            <li>
-              <Link to="/">Login</Link>
-            </li>
+            <>
+              <li className={menu === "/login" ? "active" : ""}>
+                <Link to="/login" onClick={() => setMenu("/login")}>Login</Link>
+              </li>
+              <li className={menu === "/signup" ? "active" : ""}>
+                <Link to="/signup" onClick={() => setMenu("/signup")}>Sign Up</Link>
+              </li>
+            </>
           )}
         </ul>
       </div>
