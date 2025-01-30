@@ -14,20 +14,8 @@ const ProductList = ({ addToCart }) => {
   // Fetch products from backend
   useEffect(() => {
     const fetchProducts = async () => {
-      const token = localStorage.getItem("token"); // Retrieve token from localStorage
-      if (!token) {
-        setError("User is not authenticated");
-        setLoading(false);
-        return;
-      }
-
       try {
-        const response = await axios.get("https://giftly-backend.onrender.com/api/products", {
-          headers: {
-            Authorization: `Bearer ${token}`, // Add token to Authorization header
-          },
-        });
-
+        const response = await axios.get("https://giftly-backend.onrender.com/api/products");
         setProducts(response.data); // Set the products data
         setLoading(false);
       } catch (error) {
@@ -36,9 +24,10 @@ const ProductList = ({ addToCart }) => {
         setLoading(false);
       }
     };
-
+  
     fetchProducts();
   }, []);
+  
 
   const filteredProducts = filter === "All"
     ? products
