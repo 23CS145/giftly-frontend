@@ -41,9 +41,9 @@ const Navbar = ({ cartCount, user, onLogout }) => {
 
           {user ? (
             <>
-              <li>
-                <Link to="/profile">Profile</Link>
-              </li>
+              {/* <li className={menu === "/profile" ? "active" : ""}>
+                <Link to="/profile" onClick={() => setMenu("/profile")}>Profile</Link>
+              </li> */}
               <li>
                 <button onClick={onLogout} className="logout-btn">Logout</button>
               </li>

@@ -2,12 +2,12 @@ import React, { useState, useEffect } from "react";
 import { BrowserRouter as Router, Route, Routes } from "react-router-dom";
 import Navbar from "./Components/Navbar.jsx";
 import Footer from "./Components/Footer.jsx";
-import Home from "./pages/Home";
+// import Home from "./pages/Home";
 import Products from "./pages/Products.jsx";
 import Cart from "./pages/Cart.jsx";
 import Checkout from "./pages/Checkout.jsx";
 import OrderConfirmation from "./pages/OrderConfirmation.jsx";
-import Profile from "./pages/Profile.jsx";
+// import Profile from "./pages/Profile.jsx";
 import Login from "./Components/Login.jsx";
 import Signup from "./Components/Signup.jsx";
 
@@ -90,12 +90,13 @@ const App = () => {
         <Navbar cartCount={cartCount} user={user} onLogout={handleLogout} />
         <div className="content">
           <Routes>
-            <Route path="/" element={<Home user={user} />} />
+            {/* <Route path="/" element={<Home user={user} />} /> */}
+            <Route path="/" element={<Products addToCart={addToCart} />} />
             <Route path="/products" element={<Products addToCart={addToCart}/>} />
             <Route path="/cart" element={<Cart cart={cart} removeFromCart={removeFromCart} addToCart={addToCart}/>} />
             <Route path="/checkout" element={<Checkout cart={cart} />} />
             <Route path="/order-confirmation" element={<OrderConfirmation />} />
-            <Route path="/profile" element={<Profile />} />
+            {/* <Route path="/profile" element={<Profile />} /> */}
             <Route path="/login" element={<Login onLogin={handleLogin} />} />
             <Route path="/signup" element={<Signup onSignup={handleLogin} />} />
           </Routes>

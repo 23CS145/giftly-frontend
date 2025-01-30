@@ -1,54 +1,54 @@
 import React, { useState } from "react";
-import { useNavigate } from "react-router-dom";
 import axios from "axios";
 
-const Signup = ({ onSignup }) => {
-  const [name, setName] = useState("");
+const Signup = () => {
+  const [username, setUsername] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
   const [confirmPassword, setConfirmPassword] = useState("");
   const [error, setError] = useState("");
-  const navigate = useNavigate();
+  const [success, setSuccess] = useState("");
 
   const handleSubmit = async (e) => {
     e.preventDefault();
+    setError("");
+    setSuccess("");
+
     if (password !== confirmPassword) {
-      setError("Passwords don't match");
+      setError("Passwords do not match");
       return;
     }
-    setError("");
 
     try {
       const response = await axios.post("https://giftly-backend.onrender.com/signup", {
-        username: name,
+        username,
         email,
         password,
         confirm_password: confirmPassword,
       });
-
-      if (response.data.token) {
-        onSignup({ email, role: "user" }, response.data.token);
-        navigate("/products");
-      } else {
-        alert("Signup failed!");
-      }
+      setSuccess(response.data.message);
     } catch (err) {
-      setError(err.response?.data?.message || "Signup failed");
+      setError(err.response?.data?.message || "An error occurred");
     }
   };
 
   return (
     <div className="auth-container">
       <h2>Sign Up</h2>
+      {error && <p style={{ color: "red" }}>{error}</p>}
+      {success && <p style={{ color: "green" }}>{success}</p>}
       <form onSubmit={handleSubmit}>
         <label>Name</label>
-        <input type="text" value={name} onChange={(e) => setName(e.target.value)} required />
+        <input type="text" value={username} onChange={(e) => setUsername(e.target.value)} required />
         <label>Email</label>
         <input type="email" value={email} onChange={(e) => setEmail(e.target.value)} required />
         <label>Password</label>
         <input type="password" value={password} onChange={(e) => setPassword(e.target.value)} required />
+        <label>Confirm Password:</label>
+          <input type="password" value={confirmPassword} onChange={(e) => setConfirmPassword(e.target.value)} required />
         <button type="submit">Sign Up</button>
       </form>
+      
     </div>
   );
 };
